@@ -1,0 +1,2 @@
+# CheckoutBot
+Automating web purchases
