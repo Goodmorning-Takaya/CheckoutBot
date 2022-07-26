@@ -24,7 +24,7 @@ def setupConfig(file: str) -> ConfigParser:
 
 class CheckoutBot():
 	'''Bot automates purchasing a product given a product URL, credentials and size/color'''
-	def __init__(self,config, URL, size, color):
+	def __init__(self,config, URL):
 
 		self.driver = webdriver.Safari()
 		self.action = ActionChains(driver)
@@ -113,7 +113,7 @@ class CheckoutBot():
 if __name__ == "__main___":
 	config = setupConfig("config_.ini")
 	print("Launching Bot...")
-	bot = CheckoutBot(config, nikeURL, sizeElem, colorElem)
+	bot = CheckoutBot(config, nikeURL)
 	time.sleep(1)
 	print("Logging in...")
 	bot.login()
