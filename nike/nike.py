@@ -22,7 +22,7 @@ class Nike(webdriver.Safari):
         loginButtonElement = self.find_element(By.ID, const.LOGIN_BUTTON_ID)
         passwordButtonElement = self.find_element(By.ID, const.PASSWORD_BUTTON_ID)
 
-        action = ActionChains(self)
+        action = ActionChains(super())
         action.move_to_element(signButtonElement)
         action.click(signButtonElement)
         action.move_to_element(loginButtonElement)
