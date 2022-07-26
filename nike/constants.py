@@ -1,4 +1,11 @@
 ITEM_URL = "https://www.nike.com/t/mens-basketball-t-shirt-RxlfV9/DV1214-100"
-SIGN_BUTTON_CLASS = "nav-btn p0-sm d-sm-b body-4 u-bold ml2-sm mr2-sm"
-LOGIN_BUTTON_ID = "192ffd08-4d60-408c-8c75-821cad9c0cc7"
-PASSWORD_BUTTON_ID = "3104580a-d23b-43d1-8782-babc5be49fad"
+
+SIGN_IN_BUTTON_XPATH = "/html/body/div[3]/div/div[3]/div[1]/div/div/div[3]/div/button"
+EMAIL_FIELD_XPATH = "/html/body/div[4]/div/div[1]/div/div[6]/form/div[2]/input"
+PASSWORD_FIELD_XPATH = "/html/body/div[4]/div/div[1]/div/div[6]/form/div[3]/input"
+SUBMIT_SIGN_IN_BUTTON_XPATH = "/html/body/div[4]/div/div[1]/div/div[6]/form/div[6]/input"
+
+COLOR_BUTTON_XPATH = "/html/body/div[4]/div/div/div[2]/div/div[4]/div[2]/div[2]/div/div/div[2]/div/div/fieldset/div[3]/div/input"
+SIZE_BUTTON_XPATH = "/html/body/div[4]/div/div/div[2]/div/div[4]/div[2]/div[2]/div/div/div[3]/form/div[1]/fieldset/div/div[3]/input"
+ADD_TO_BAG_BUTTON_XPATH = "/html/body/div[4]/div/div/div[2]/div/div[4]/div[2]/div[2]/div/div/div[3]/form/div[2]/div/div/button[1]"
+CHECKOUT_BUTTON_XPATH = ""

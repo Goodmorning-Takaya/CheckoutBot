@@ -1,9 +1,16 @@
+import os
+import time
 import nike.constants as const
 
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 from selenium import webdriver
 
-class Nike(webdriver.Safari):
-    def __init__(self, config) -> None:
+class Nike(webdriver.Chrome):
+    def __init__(self, config, driver_path=r"C:\SeleniumDrivers") -> None:
+        '''Instantiate the bot and webdriver object'''
+        self.driver_path = driver_path
+        os.environ['PATH'] += driver_path
         super(Nike, self).__init__()
 
         self.username = config.get("NIKE_ACCOUNT", "USERNAME")
@@ -15,21 +22,58 @@ class Nike(webdriver.Safari):
         self.expiration_year = config.get("CREDIT_CARD", "EXPY")
 
     def land_item_page(self) -> None:
+        '''Open item page'''
         self.get(const.ITEM_URL)
+        time.sleep(3)
 
     def login(self) -> None:
-        signButtonElement = self.find_element(By.CLASS_NAME, const.SIGN_BUTTON_CLASS)
-        loginButtonElement = self.find_element(By.ID, const.LOGIN_BUTTON_ID)
-        passwordButtonElement = self.find_element(By.ID, const.PASSWORD_BUTTON_ID)
-
+        '''Navigate to log in page and submit credentials'''
+        self._nav_login()
         action = ActionChains(super())
-        action.move_to_element(signButtonElement)
-        action.click(signButtonElement)
-        action.move_to_element(loginButtonElement)
-        action.click(loginButtonElement)
+
+        loginFieldElement = self.find_element(By.XPATH, const.EMAIL_FIELD_XPATH)
+        passwordFieldElement = self.find_element(By.XPATH, const.PASSWORD_FIELD_XPATH)
+        submitSignInButtonElement = self.find_element(By.XPATH, const.SUBMIT_SIGN_IN_BUTTON_XPATH)
+
+        action.move_to_element(loginFieldElement)
+        action.click(loginFieldElement)
         action.send_keys(self.username)
-        action.move_to_element(passwordButtonElement)
-        action.click(passwordButtonElement)
+        action.move_to_element(passwordFieldElement)
+        action.click(passwordFieldElement)
         action.send_keys(self.password)
+        action.click(submitSignInButtonElement)
         action.perform()
+
+    def purchase(self) -> None:
+        '''Execute a purchase'''
+        self._select_color()
+        self._select_size()
+        self._add_to_cart()
+        self._checkout()
+
+    def _checkout(self) -> None:
+        '''Uses the webdriver to complete order'''
+        checkoutButtonElement = self.find_element(By.XPATH, const.CHECKOUT_BUTTON_XPATH)
+        checkoutButtonElement.click()
+
+    def _select_color(self) -> None:
+        '''Uses the webdriver to select the color of item to be checked out'''
+        colorButtonElement = self.find_element(By.XPATH, const.COLOR_BUTTON_XPATH)
+        colorButtonElement.click()
+
+    def _select_size(self) -> None:
+        '''Uses the webdriver to select the size of item to be checked out'''
+        sizeButtonElement = self.find_element(By.XPATH, const.SIZE_BUTTON_XPATH)
+        sizeButtonElement.click()
+
+    def _add_to_cart(self) -> None:
+        '''uses the webdriver to add item to cart'''
+        addToCartElement = self.find_element(By.XPATH, const.ADD_TO_BAG_BUTTON_XPATH)
+        addToCartElement.click()
+
+    def _nav_login(self) -> None:
+        '''Locate login button element and clicking on it'''
+        signInButtonElement = self.find_element(By.XPATH, const.SIGN_IN_BUTTON_XPATH)
+        signInButtonElement.click()
+
      
