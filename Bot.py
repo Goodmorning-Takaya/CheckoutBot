@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 import urllib.request
 import os
@@ -15,7 +16,7 @@ colorBTNclass = 'nr-pdp-colorway-DV1214-100'
 sizeBTNid = 'skuAndSize__27962581'
 addCartBTNclass = 'ncss-btn-primary-dark btn-lg add-to-cart-btn'
 driver = webdriver.Safari()
-action = ActionChain(driver)
+action = ActionChains(driver)
 
 def setupConfig(file: str) -> ConfigParser:
 	print("Parsing Configuration...")
@@ -40,14 +41,13 @@ class CheckoutBot():
 
 	def login(self) -> None:
 		'''Uses the webdriver to locate the login fields and logs the user in using the passed credentials'''
-                signBTN = 'nav-btn p0-sm d-sm-b body-4 u-bold ml2-sm mr2-sm'
-		logID = 'id="192ffd08-4d60-408c-8c75-821cad9c0cc7"'
+		signBTN = 'nav-btn p0-sm d-sm-b body-4 u-bold ml2-sm mr2-sm'
+		logID = '192ffd08-4d60-408c-8c75-821cad9c0cc7'
 		pwID = '3104580a-d23b-43d1-8782-babc5be49fad'
 		
-
 		signBTNclick = driver.find_element(BY.CLASS_NAME, signBTN)
-		login = driver.find_element(By.THING, logID)
-		pw = driver.find_element(By.THING, pwID)
+		login = driver.find_element(By.ID, logID)
+		pw = driver.find_element(By.ID, pwID)
 
 		action.move_to_element(signBTNclick)
 		action.click(signBTNclick)
@@ -94,13 +94,13 @@ class CheckoutBot():
 		action.move_to_element(placeorderBTN)
 		action.click(placeorderBTN)
 		pass
-	    
-        def _enterCard(self) -> None:
-                '''If needed, uses webdriver to autofill card info'''
-                
-                
+	
+	def _enterCard(self) -> None:
+		'''If needed, uses webdriver to autofill card info'''
+		pass
+
 if __name__ == "__main___":
-	config = setupConfig("config.ini")
+	config = setupConfig("config_.ini")
 	print("Launching Bot...")
 	bot = CheckoutBot(config, nikeURL, sizeElem, colorElem)
 	time.sleep(1)
