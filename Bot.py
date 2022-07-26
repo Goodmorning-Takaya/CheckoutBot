@@ -7,7 +7,7 @@ import time
 import urllib.request
 import os
 from configparser import ConfigParser
-import tkinter as tk
+
 
 #TEST ITEM
 
