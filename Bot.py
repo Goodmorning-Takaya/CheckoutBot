@@ -6,129 +6,66 @@ import time
 import urllib.request
 import os
 from configparser import ConfigParser
-import tkinter as tk
 
-class BBYbot():
-	def __init__(self,config):
 
-		self.driver = webdriver.Chrome('./chromedriver.exe')
-		self.url="https://www.bestbuy.com/"
-		self.username=config.get('BBY_ACCOUNT','USERNAME')
-		self.password=config.get('BBY_ACCOUNT','PASSWORD')
-		self.ID=config.get('BBY_ACCOUNT','ID')
-		self.card=config.get('CARD_INFO','CARD#')
-		self.cardsecurity=config.get('CARD_INFO','CARDSECURITY')
-		self.expm=config.get('CARD_INFO','EXPM')
-		self.expy=config.get('CARD_INFO','EXPY')
-	
+nikeURL = 'https://www.nike.com/t/mens-basketball-t-shirt-RxlfV9/DV1214-100'
+colorElem = 'css-7aigzk colorway-container d-sm-ib d-lg-tc pr1-sm pb1-sm'
+sizeElem = 'skuAndSize__27962549'
+addCartElem = 'ncss-btn-primary-dark btn-lg add-to-cart-btnncss-btn-primary-dark btn-lg add-to-cart-btn'
 
-		self.driver.get(self.url)
+def setupConfig(file: str) -> ConfigParser:
+	print("Parsing Configuration...")
+	config = ConfigParser()
+	config.read("file")
+	return config
 
-	def Login(self):
-		self.driver.find_element_by_class_name("BtnTxt").click()
-		time.sleep(.5)
-		self.driver.find_element_by_class_name("btn-secondary").click()
-		time.sleep(2)
-		username_input=self.driver.find_element_by_xpath('/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[1]/div/input')
-		username_input.send_keys(self.username)
-		password_input = self.driver.find_element_by_xpath('/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[2]/div/input')
-		password_input.send_keys(self.password)
-		password_input.submit()
-		time.sleep(3)
+class CheckoutBot():
+	'''Bot automates purchasing a product given a product URL, credentials and size/color'''
+	def __init__(self,config, URL, size, color):
+		self.username = config.get("NIKE_ACCOUNT", "USERNAME")
+		self.password = config.get("NIKE_ACCOUNT", "PASSWORD")
+		self.ID = config.get("NIKE_ACCOUNT", "ID")
+		self.card = config.get("CREDIT_CARD", "CCNUM")
+		self.ccsecurity = config.get("CREDIT_CARD", "CCV")
+		self.expiration_month = config.get("CREDIT_CARD", "EXPM")
+		self.expiration_year = config.get("CREDIT_CARD", "EXPY")
+		self.driver = webdriver.Chrome()
+		self.URL = driver.get(URL)
+		self.addcartElement = driver.find_element(By.CLASSNAME, addCartElem)
+		self.colorElement = driver.find_element(By.CLASSNAME, color)
+		self.sizeElement = driver.find_element(By.ID, size)
 
-		try:
-			employee=self.driver.find_element_by_xpath('/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[1]/div/input')
-			employee.send_keys(self.ID)
-			employee.submit()
-		except:
-			return
+	def login(self) -> None:
+		'''Uses the webdriver to locate the login fields and logs the user in using the passed credentials'''
+		pass
 
-	def searchtag(self, search_tag):
-		searchbar=self.driver.find_element_by_class_name('search-input')
-		searchbar.send_keys(search_tag)
-		searchbar.submit()
+	def purchase(self) -> None:
+		'''Execute a purchase'''
+		pass
 
-	def in_stock(self):
-		time.sleep(5)
-		try:
-			
-			item = self.driver.find_element_by_class_name('btn-lg')
-			#webdriver.ActionChains(self.driver).click_and_hold(self.driver.find_elements_by_class_name('btn btn-primary btn-lg btn-block btn-leading-ficon add-to-cart-button')).perform()
-			#webdriver.ActionChains(self.driver).release().preform()
-			print("In stock!")
-			return True
-			
+	def _selectColor(self) -> None:
+		'''Uses the webdriver to select the color of item to be checked out'''
+		pass
 
-		except:
-			print("Item is out of stock")
-			return False
+	def _selectSize(self) -> None:
+		'''Uses the webdriver to select the size of item to be checked out'''
+		pass
 
-	def add_toCart(self, incart):
-		try:
-			time.sleep(3)
-			item =self.driver.find_element_by_class_name('btn-lg')
-			item.click()
-			time.sleep(5)							
-			go_to_cart_button= self.driver.find_element_by_class_name("go-to-cart-button")
-			
-			go_to_cart_button.click()
-			incart=True
-			return incart
-			
-		except:
-			print("Couldnt add to cart trying again")
-			incart=False
-	def checkout(self):
-		time.sleep(3)
-		#selects shipping
-		self.driver.find_element_by_xpath('/html/body/div[1]/main/div/div[2]/div[1]/div/div/span/div/div[1]/div[1]/section[1]/div[4]/ul/li/section/div[2]/div[2]/form/div[2]/fieldset/div[2]/div[1]/div/div/div/input').click()
-		#presses checkout
-		self.driver.find_element_by_xpath('/html/body/div[1]/main/div/div[2]/div[1]/div/div/span/div/div[1]/div[1]/section[2]/div/div/div[3]/div/div[1]/button').click()
-		#continues to payment
-		time.sleep(2)
-		self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[2]/form/section/div/div[2]/div/div/button').click()
-		time.sleep(4)
-		paymentinfo=self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[3]/div/section/div[1]/div/section/div[1]/div/input')
-		paymentinfo.send_keys(self.card)
-		selectmm = Select(self.driver.find_element_by_name('expiration-month'))
-		selectmm.select_by_visible_text(self.expm)
-		selectyy = Select(self.driver.find_element_by_name('expiration-year'))
-		selectyy.select_by_visible_text(self.expy)
-		securitycode=self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[3]/div/section/div[1]/div/section/div[2]/div[2]/div/div[2]/div/input')
-		securitycode.send_keys(self.cardsecurity)
-		self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[3]/div/section/div[4]/button').click()
+	def _addToCart(self) -> None:
+		'''Uses the webdriver to create and execute an action chain to reach the checkout page'''
+		pass
 
-	def closeEmailprompt(self):
-		self.driver.find_element_by_class_name("c-modal-close-icon").click()
-	def close(self):
-		self.driver.close()
-def getinput():
-	sku_num=skunumber.get()
-	print(sku_num)
-	return sku_num
+	def _checkout(self) -> None:
+		'''Uses the webdriver to complete checkout of order'''
+		pass
 
-print("Starting Bot")
-searchtag=''
-config_file= ConfigParser()
-config_file.read("config.ini")
-bot = BBYbot(config_file)
-time.sleep(1)
-try:
-	bot.Login()
-except:
-	bot.closeEmailprompt()
-	time.sleep(3)
-	bot.Login()
-time.sleep(4)
-bot.searchtag("6429440")
-instock= bot.in_stock()
-incart=False
-if (instock==True):
-	while(incart != True):
-	 	incart=bot.add_toCart(incart)
-print("In cart!")
-time.sleep(1)
-#bot.checkout()
-
-print("compiled")
-bot.close()
+if __name__ == "__main___":
+	config = setupConfig("config.ini")
+	print("Launching Bot...")
+	bot = CheckoutBot(config, nikeURL, sizeElem, colorElem)
+	time.sleep(1)
+	print("Logging in...")
+	bot.login()
+	print("Making purchase...")
+	bot.purchase()
+	print("Purchase complete!")
