@@ -53,8 +53,12 @@ class Nike(webdriver.Chrome):
 
     def _checkout(self) -> None:
         '''Uses the webdriver to complete order'''
+        cartButtonElement = self.find_element(By.XPATH, const.CART_BUTTON_XPATH)
+        cartButtonElement.click()
         checkoutButtonElement = self.find_element(By.XPATH, const.CHECKOUT_BUTTON_XPATH)
         checkoutButtonElement.click()
+        placeOrderButtonElement = self.find_element(By.XPATH, const.PLACE_ORDER_BUTTON_XPATH)
+        placeOrderButtonElement.click()
 
     def _select_color(self) -> None:
         '''Uses the webdriver to select the color of item to be checked out'''
