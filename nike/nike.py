@@ -31,24 +31,26 @@ class Nike(webdriver.Chrome):
     def login(self) -> None:
         '''Navigate to log in page and submit credentials'''
         self._nav_login()
-        action = ActionChains(super())
+
 
         loginFieldElement = self.find_element(By.XPATH, const.EMAIL_FIELD_XPATH)
         passwordFieldElement = self.find_element(By.XPATH, const.PASSWORD_FIELD_XPATH)
         submitSignInButtonElement = self.find_element(By.XPATH, const.SUBMIT_SIGN_IN_BUTTON_XPATH)
 
-        action.move_to_element(loginFieldElement)
-        action.click(loginFieldElement)
-        action.send_keys(self.username)
-        randomWaitTime = random.randrange(5.0, 10.0)
-        action.pause(randomWaitTime)
-        action.move_to_element(passwordFieldElement)
-        action.click(passwordFieldElement)
-        action.send_keys(self.password)
-        randomWaitTime = random.randrange(5.0, 10.0)
-        action.pause(randomWaitTime)
-        action.click(submitSignInButtonElement)
-        action.perform()
+        self.move_to_element(loginFieldElement)
+        self.click(loginFieldElement)
+        self._send_keys_delayed(self.username)
+        randomWaitTime = random.randrange(0.5, 1.5)
+        time.sleep(randomWaitTime)
+
+        self.move_to_element(passwordFieldElement)
+        self.click(passwordFieldElement)
+        self._send_keys_delayed(self.password)
+        randomWaitTime = random.randrange(0.5, 1.5)
+        time.sleep(randomWaitTime)
+
+        self.click(submitSignInButtonElement)
+
 
     def purchase(self) -> None:
         '''Execute a purchase'''
@@ -57,15 +59,22 @@ class Nike(webdriver.Chrome):
         self._add_to_cart()
         self._checkout()
 
+    def _send_keys_delayed(self, word:str) -> None:
+        for character in word:
+            randomWaitTime = random.randrange(0.2, 0.7)
+            self.send_keys(character)
+            time.sleep(randomWaitTime)
+
+
     def _checkout(self) -> None:
         '''Uses the webdriver to complete order'''
         cartButtonElement = self.find_element(By.XPATH, const.CART_BUTTON_XPATH)
         cartButtonElement.click()
-        randomWaitTime = random.randrange(5.0, 10.0)
+        randomWaitTime = random.randrange(1, 3)
         time.sleep(randomWaitTime)
         checkoutButtonElement = self.find_element(By.XPATH, const.CHECKOUT_BUTTON_XPATH)
         checkoutButtonElement.click()
-        randomWaitTime = random.randrange(5.0, 10.0)
+        randomWaitTime = random.randrange(1, 3)
         time.sleep(randomWaitTime)
         placeOrderButtonElement = self.find_element(By.XPATH, const.PLACE_ORDER_BUTTON_XPATH)
         placeOrderButtonElement.click()
