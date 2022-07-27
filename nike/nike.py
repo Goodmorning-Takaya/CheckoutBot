@@ -25,31 +25,33 @@ class Nike(webdriver.Chrome):
     def land_item_page(self) -> None:
         '''Open item page'''
         self.get(const.ITEM_URL)
-        randomWaitTime = random.randrange(5.0, 10.0)
+        randomWaitTime = random.randrange(1, 3)
         time.sleep(randomWaitTime)
 
     def login(self) -> None:
         '''Navigate to log in page and submit credentials'''
         self._nav_login()
-
+        action = ActionChains(super())
 
         loginFieldElement = self.find_element(By.XPATH, const.EMAIL_FIELD_XPATH)
         passwordFieldElement = self.find_element(By.XPATH, const.PASSWORD_FIELD_XPATH)
         submitSignInButtonElement = self.find_element(By.XPATH, const.SUBMIT_SIGN_IN_BUTTON_XPATH)
 
-        self.move_to_element(loginFieldElement)
-        self.click(loginFieldElement)
-        self._send_keys_delayed(self.username)
-        randomWaitTime = random.randrange(0.5, 1.5)
+        action.move_to_element(loginFieldElement)
+        action.click(loginFieldElement)
+        action.perform()
+        self._send_keys_delayed(self.username, loginFieldElement, action)
+        randomWaitTime = random.uniform(0.2, 0.7)
         time.sleep(randomWaitTime)
 
-        self.move_to_element(passwordFieldElement)
-        self.click(passwordFieldElement)
-        self._send_keys_delayed(self.password)
-        randomWaitTime = random.randrange(0.5, 1.5)
+        action.move_to_element(passwordFieldElement)
+        action.click(passwordFieldElement)
+        action.perform()
+        self._send_keys_delayed(self.password, passwordFieldElement, action)
+        randomWaitTime = random.uniform(0.2, 0.7)
         time.sleep(randomWaitTime)
 
-        self.click(submitSignInButtonElement)
+        submitSignInButtonElement.click()
 
 
     def purchase(self) -> None:
@@ -59,10 +61,12 @@ class Nike(webdriver.Chrome):
         self._add_to_cart()
         self._checkout()
 
-    def _send_keys_delayed(self, word:str) -> None:
+    def _send_keys_delayed(self, word:str, element, action) -> None:
+
         for character in word:
-            randomWaitTime = random.randrange(0.2, 0.7)
-            self.send_keys(character)
+            randomWaitTime = random.uniform(0.05, 0.13)
+            action.send_keys(character)
+            action.perform()
             time.sleep(randomWaitTime)
 
 
