@@ -1,6 +1,7 @@
 import os
 import time
 import nike.constants as const
+import random
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -24,7 +25,8 @@ class Nike(webdriver.Chrome):
     def land_item_page(self) -> None:
         '''Open item page'''
         self.get(const.ITEM_URL)
-        time.sleep(3)
+        randomWaitTime = random.randrange(5.0, 10.0)
+        time.sleep(randomWaitTime)
 
     def login(self) -> None:
         '''Navigate to log in page and submit credentials'''
@@ -38,9 +40,13 @@ class Nike(webdriver.Chrome):
         action.move_to_element(loginFieldElement)
         action.click(loginFieldElement)
         action.send_keys(self.username)
+        randomWaitTime = random.randrange(5.0, 10.0)
+        action.pause(randomWaitTime)
         action.move_to_element(passwordFieldElement)
         action.click(passwordFieldElement)
         action.send_keys(self.password)
+        randomWaitTime = random.randrange(5.0, 10.0)
+        action.pause(randomWaitTime)
         action.click(submitSignInButtonElement)
         action.perform()
 
@@ -55,8 +61,12 @@ class Nike(webdriver.Chrome):
         '''Uses the webdriver to complete order'''
         cartButtonElement = self.find_element(By.XPATH, const.CART_BUTTON_XPATH)
         cartButtonElement.click()
+        randomWaitTime = random.randrange(5.0, 10.0)
+        time.sleep(randomWaitTime)
         checkoutButtonElement = self.find_element(By.XPATH, const.CHECKOUT_BUTTON_XPATH)
         checkoutButtonElement.click()
+        randomWaitTime = random.randrange(5.0, 10.0)
+        time.sleep(randomWaitTime)
         placeOrderButtonElement = self.find_element(By.XPATH, const.PLACE_ORDER_BUTTON_XPATH)
         placeOrderButtonElement.click()
 

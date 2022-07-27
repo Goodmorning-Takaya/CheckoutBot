@@ -8,7 +8,7 @@ config.read("config_.ini")
 bot = Nike(config)
 
 bot.land_item_page()
-print("logging in...")
+print("logging in..git .")
 bot.login()
 bot.purchase()
 print("Purchase complete!")
